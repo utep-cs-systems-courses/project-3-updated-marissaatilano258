@@ -60,6 +60,17 @@ void drawChar5x7(u_char col, u_char row, char c,
  */
 void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
 		     u_int colorBGR);
+
+void drawRectFromCenter(u_int width, u_int height, u_char centerCol, u_char centerRow,
+			     u_int colorBGR);
+
+void drawTriangle(u_int center, u_int height, u_int rowOffset, u_int colorBGR);
+
+void drawSnake(u_int center, u_int colorBGR);
+
+void drawRightDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
+
+void drawLeftDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
+
+void snakeStateMachine();
 #endif // included
-
-

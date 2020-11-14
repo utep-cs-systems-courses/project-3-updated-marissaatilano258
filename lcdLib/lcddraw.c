@@ -115,3 +115,102 @@ void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
   fillRectangle(colMin + width, rowMin, 1, height, colorBGR);
 }
 
+void drawRectFromCenter(u_int width, u_int height, u_char centerCol, u_char centerRow, u_int colorBGR)
+{
+  for(u_char row = 0; row <= height; row++){
+    for(u_char col = 0; col <= width; col++){
+      drawPixel(centerCol - col, centerRow - row, colorBGR);
+      drawPixel(centerCol + col, centerRow - row, colorBGR);
+      drawPixel(centerCol - col, centerRow + row, colorBGR);
+      drawPixel(centerCol + col, centerRow + row, colorBGR);
+    }
+  }
+}
+
+
+void drawTriangle(u_int center, u_int height, u_int rowOffset, u_int colorBGR)
+{
+  for(u_int row = 0; row < height; row++){
+    for(u_int col = 0; col < row; col++){
+      drawPixel(center+col, row + rowOffset, colorBGR);
+      drawPixel(center-col, row + rowOffset, colorBGR);
+    }
+  }
+}
+
+void drawSnake(u_int center, u_int colorBGR)
+{
+  u_int currCol = center;
+  u_int currRow = 0;
+  u_int direction = 1;
+  
+  while(currRow < 160){
+    if(direction){
+      for(int i = 0; i < 5; i++){
+	currCol++;
+	drawPixel(currCol, currRow, colorBGR);
+	currRow++;
+      }
+      direction = 0;
+    } else {
+      for(int i = 0; i < 5; i++){
+	currCol--;
+	drawPixel(currCol, currRow, colorBGR);
+	currRow++;
+      }
+      direction = 1;
+    }
+  }   
+}
+
+
+void drawRightDiagnol(u_int startRow, u_int startCol, u_int length, u_int colorBGR)
+{
+  for(int i = 0; i < length; i++){
+    drawPixel(startCol, startRow, colorBGR);
+    startCol++;
+    startRow++;
+  }
+}
+
+void drawLeftDiagnol(u_int startRow, u_int startCol, u_int length, u_int colorBGR)
+{
+  for(int i = 0; i < length; i++){
+    drawPixel(startCol, startRow, colorBGR);
+    startCol--;
+    startRow++;
+  }
+}
+/*
+void snakeStateMachine()
+{
+  static u_int row = 0;
+  static u_int col = 60;
+  static u_int length = 8;
+  static u_int state = 0;
+  static u_int colorBGR = COLOR_GREEN;
+
+  if(row >= 160){
+    row = 0;
+    col = 60;
+    state = 0;
+    colorBGR = (colorBGR == COLOR_GREEN) ? COLOR_BLUE: COLOR_GREEN;
+  }
+
+  switch(state){
+  case 0:
+    drawRightDiagnol(row, col, length, colorBGR);
+    row+=length;
+    col+=length;
+    state++;
+    break;
+  case 1:
+    drawLeftDiagnol(row, col, length, colorBGR);
+    row+=length;
+    col-=length;
+  default:
+    state = 0;
+    break;
+  }
+}
+*/
