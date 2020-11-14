@@ -63,3 +63,8 @@ void christmasStateMachine()
   }
     
 }
+
+void spiderStateMachine()
+{
+  drawPixel(5,5,COLOR_BLACK);
+}

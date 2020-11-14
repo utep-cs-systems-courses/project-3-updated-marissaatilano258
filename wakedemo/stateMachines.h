@@ -5,4 +5,6 @@ void snakeStateMachine();
 
 void christmasStateMachine();
 
+void spiderStateMachine();
+
 #endif //included
