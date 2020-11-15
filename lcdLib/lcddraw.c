@@ -94,6 +94,34 @@ void drawString5x7(u_char col, u_char row, char *string,
   }
 }
 
+void drawChar8x12(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char col = 0;
+  u_char row = 0;
+  u_char bit = 0x01;
+  u_char oc = c - 0x20;
+
+  lcd_setArea(rcol, rrow, rcol + 7, rrow + 12);
+  while(row < 13){
+    while(col < 8){
+      u_int colorBGR = (font_8x12[oc][col] & bit) ? fgColorBGR : bgColorBGR;
+      lcd_writeColor(colorBGR);
+      col++;
+    }
+    col = 0;
+    bit <<=1;
+    row++;
+  }
+}
+
+void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+  while(*string) {
+    drawChar8x12(cols, row, *string++, fgColorBGR, bgColorBGR);
+    cols += 9;
+  }
+}
 
 /** Draw rectangle outline
  *  
@@ -126,7 +154,7 @@ void drawRectFromCenter(u_int width, u_int height, u_char centerCol, u_char cent
     }
   }
 }
-
+    
 
 void drawTriangle(u_int center, u_int height, u_int rowOffset, u_int colorBGR)
 {
@@ -137,32 +165,6 @@ void drawTriangle(u_int center, u_int height, u_int rowOffset, u_int colorBGR)
     }
   }
 }
-
-void drawSnake(u_int center, u_int colorBGR)
-{
-  u_int currCol = center;
-  u_int currRow = 0;
-  u_int direction = 1;
-  
-  while(currRow < 160){
-    if(direction){
-      for(int i = 0; i < 5; i++){
-	currCol++;
-	drawPixel(currCol, currRow, colorBGR);
-	currRow++;
-      }
-      direction = 0;
-    } else {
-      for(int i = 0; i < 5; i++){
-	currCol--;
-	drawPixel(currCol, currRow, colorBGR);
-	currRow++;
-      }
-      direction = 1;
-    }
-  }   
-}
-
 
 void drawRightDiagnol(u_int startRow, u_int startCol, u_int length, u_int colorBGR)
 {
@@ -181,36 +183,10 @@ void drawLeftDiagnol(u_int startRow, u_int startCol, u_int length, u_int colorBG
     startRow++;
   }
 }
-/*
-void snakeStateMachine()
+
+void drawDownwardLine(u_int col, u_int length, u_int colorBGR)
 {
-  static u_int row = 0;
-  static u_int col = 60;
-  static u_int length = 8;
-  static u_int state = 0;
-  static u_int colorBGR = COLOR_GREEN;
-
-  if(row >= 160){
-    row = 0;
-    col = 60;
-    state = 0;
-    colorBGR = (colorBGR == COLOR_GREEN) ? COLOR_BLUE: COLOR_GREEN;
-  }
-
-  switch(state){
-  case 0:
-    drawRightDiagnol(row, col, length, colorBGR);
-    row+=length;
-    col+=length;
-    state++;
-    break;
-  case 1:
-    drawLeftDiagnol(row, col, length, colorBGR);
-    row+=length;
-    col-=length;
-  default:
-    state = 0;
-    break;
+  for(u_int row = 0; row < length; row++){
+    drawPixel(col, row, colorBGR);
   }
 }
-*/

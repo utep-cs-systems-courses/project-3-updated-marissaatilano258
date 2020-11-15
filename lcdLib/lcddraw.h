@@ -50,6 +50,13 @@ void drawString5x7(u_char col, u_char row, char *string,
 void drawChar5x7(u_char col, u_char row, char c, 
 		 u_int fgColorBGR, u_int bgColorBGR);
 
+void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR);
+
+void drawChar8x12(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR);
+
+
+
+
 /** Draw rectangle outline
  *  
  *  \param colMin Column start
@@ -66,11 +73,9 @@ void drawRectFromCenter(u_int width, u_int height, u_char centerCol, u_char cent
 
 void drawTriangle(u_int center, u_int height, u_int rowOffset, u_int colorBGR);
 
-void drawSnake(u_int center, u_int colorBGR);
-
 void drawRightDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
 
 void drawLeftDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
 
-void snakeStateMachine();
+void drawDownwardLine(u_int col, u_int length, u_int colorBGR);
 #endif // included
