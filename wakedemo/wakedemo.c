@@ -7,17 +7,14 @@
 
 #define LED_GREEN BIT6             // P1.0
 
-
 short redrawScreen = 1;
-u_int fontFgColor = COLOR_GREEN;
-
 
 void wdt_c_handler()
 {
   static int secCount = 0;
   
   secCount ++;
-  if (secCount == 2) {		/* once/sec */
+  if (secCount == 100) {		/* once/sec */
     secCount = 0;
     redrawScreen = 1;
   }
@@ -39,22 +36,23 @@ void main()
   while(1){
     if(redrawScreen){
       redrawScreen = 0;
-      //drawString8x12(25,25,"Hello", COLOR_BLACK, COLOR_PURPLE);
-      //drawString5x7(10,10,"!", COLOR_RED, COLOR_BLUE);
-      //spiderStateMachine();
-      //u_int switches = p2sw_read();
-      //u_int button1 = (switches & (0x1)) ? 0 : 1;
-      //if(button1){
-      //christmasStateMachine();
-      //}
-    }
-    u_int switches = p2sw_read();
-    u_int button1 = (switches & 0x1) ? 0: 1;
-    if(button1){
-      //christmasStateMachine();
-      //spiderStateMachine();
-      snakeStateMachine(10,3);
-      button1 = 0;
+      switch(button_state){
+      case 1:
+	clearScreen(COLOR_BLUE);
+	break;
+      case 2:
+	christmasStateMachine();
+	break;
+      case 3:
+	snakeStateMachine();
+	break;
+      case 4:
+	spiderStateMachine();
+	break;
+      default:
+	clearScreen(COLOR_WHITE);
+	break;
+      }
     }
     P1OUT &= ~LED_GREEN;	/* green off */
     or_sr(0x10);		/**< CPU OFF */
