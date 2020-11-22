@@ -73,7 +73,61 @@ void scaleStateMachine()
   buzzer_set_period(2000000/note);
 }
 
-  
+void snakeSongStateMachine()
+{
+  static char snake_song_state = 0;
+  short note = 0;
+
+  switch(snake_song_state){
+  case 0:
+    note = 440;
+    break;
+  case 1:
+    note = 494;
+    break;
+  case 2:
+  case 3:
+    note = 523;
+    break;
+  case 4:
+  case 5:
+    note = 494;
+    break;
+  case 6:
+    note = 440;
+    break;
+  case 7:
+    note = 0;
+    break;
+  case 8:
+    note = 440;
+    break;
+  case 9:
+    note = 494;
+    break;
+  case 10:
+    note = 523;
+    break;
+  case 11:
+    note = 659;
+    break;
+  case 12:
+    note = 494;
+    break;
+  case 13:
+    note = 523;
+    break;
+  case 14:
+    note = 440;
+    break;
+  default:
+    note = 0;
+    snake_song_state = -1;
+    break;
+  }
+  snake_song_state++;
+  buzzer_set_period(2000000/note);
+}
 
 void snakeStateMachine(u_int col_offset, u_int thickness)
 {
@@ -118,6 +172,7 @@ void snakeStateMachine(u_int col_offset, u_int thickness)
     snake_state = 0;
     break;
   }
+  snakeSongStateMachine();
 }
 
 void christmasSongStateMachine()

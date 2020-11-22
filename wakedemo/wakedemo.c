@@ -14,8 +14,8 @@ void wdt_c_handler()
 {
   static int secCount = 0;
   
-  secCount ++;
-  if (secCount == 150) {		/* once/sec */
+  secCount++;
+  if (secCount == 75) {		/* once/sec */
     secCount = 0;
     redrawScreen = 1;
   }
