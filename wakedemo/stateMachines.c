@@ -1,9 +1,11 @@
 #include <msp430.h>
 #include "stateMachines.h"
+#include "buzzer.h"
 #include "lcdutils.h"
 #include "lcddraw.h"
 
 char button_state = 0;
+static char scale_state = -1;
 static char snake_state = -1;
 static char christmas_state = -1;
 static char spider_state = -1;
@@ -11,10 +13,67 @@ static char spider_state = -1;
 void changeButtonState(char button_pushed)
 {
   button_state = button_pushed;
+  scale_state = -1;
   christmas_state = -1;
   snake_state = -1;
   spider_state = -1;
+  buzzer_set_period(0);
 }
+
+void scaleStateMachine()
+{
+  short note = 0;
+  static int row = 145;
+  static int col = 0;
+
+  switch(scale_state){
+  case 0:
+    note = 261;
+    drawString11x16(col, row, "Do", COLOR_BLACK, COLOR_RED);
+    break;
+  case 1:
+    note = 294;
+    drawString11x16(col, row, "Re", COLOR_BLACK, COLOR_ORANGE);
+    break;
+  case 2:
+    note = 330;
+    drawString11x16(col, row, "Mi", COLOR_BLACK, COLOR_YELLOW);
+    break;
+  case 3:
+    note = 349;
+    drawString11x16(col, row, "Fa", COLOR_BLACK, COLOR_GREEN);
+    break;
+  case 4:
+    note = 392;
+    drawString11x16(col, row, "So", COLOR_BLACK, COLOR_BLUE);
+    break;
+  case 5:
+    note = 440;
+    drawString11x16(col, row, "La", COLOR_BLACK, COLOR_AQUAMARINE);
+    break;
+  case 6:
+    note = 494;
+    drawString11x16(col, row, "Ti", COLOR_BLACK, COLOR_PURPLE);
+    break;
+  case 7:
+    note = 523;
+    drawString11x16(col, row, "Do", COLOR_BLACK, COLOR_VIOLET);
+    break;
+  default:
+    clearScreen(COLOR_WHITE);
+    scale_state = -1;
+    note = 0;
+    col = -15;
+    row = 165;
+    break;
+  }
+  col+=15;
+  row-=20;
+  scale_state++;
+  buzzer_set_period(2000000/note);
+}
+
+  
 
 void snakeStateMachine(u_int col_offset, u_int thickness)
 {
@@ -61,6 +120,80 @@ void snakeStateMachine(u_int col_offset, u_int thickness)
   }
 }
 
+void christmasSongStateMachine()
+{
+  static char christmas_song_state = 0;
+  short note = 0;
+
+  switch(christmas_song_state){
+  case 0:
+  case 1:
+    note = 587;
+    break;
+  case 2:
+  case 3:
+    note = 659;   /*E*/
+    break;
+  case 4:
+  case 5:
+    note = 587;
+    break;
+  case 6:
+  case 7:
+    note = 494;
+    break;
+  case 8:
+  case 9:
+    note = 784;
+    break;
+  case 10:
+  case 11:
+    note = 659;
+    break;
+  case 12:
+  case 13:
+  case 14:
+  case 15:
+    note = 587;
+    break;
+  case 16:
+    note = 0;
+    break;
+  case 17:
+  case 18:
+    note = 587;
+    break;
+  case 19:
+    note = 659;
+    break;
+  case 20:
+    note = 587;
+    break;
+  case 21:
+    note = 659;
+    break;
+  case 22:
+    note = 587;
+    break;
+  case 23:
+    note = 784;
+    break;
+  case 24:
+  case 25:
+  case 26:
+  case 27:
+    note = 698;
+    break;
+  default:
+    christmas_song_state = -1;
+    note = 0;
+    break;
+  }
+  
+  christmas_song_state++;
+  buzzer_set_period(2000000/note);
+    
+}
 
 void christmasStateMachine()
 {
@@ -90,6 +223,8 @@ void christmasStateMachine()
     clearScreen(COLOR_WHITE);
     break;
   }
+
+  christmasSongStateMachine();
     
 }
 

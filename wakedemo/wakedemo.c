@@ -4,6 +4,7 @@
 #include "lcdutils.h"
 #include "lcddraw.h"
 #include "stateMachines.h"
+#include "buzzer.h"
 
 #define LED_GREEN BIT6             // P1.0
 
@@ -14,7 +15,7 @@ void wdt_c_handler()
   static int secCount = 0;
   
   secCount ++;
-  if (secCount == 100) {		/* once/sec */
+  if (secCount == 150) {		/* once/sec */
     secCount = 0;
     redrawScreen = 1;
   }
@@ -28,6 +29,7 @@ void main()
   configureClocks();
   lcd_init();
   p2sw_init(15);
+  buzzer_init();
   
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
@@ -38,7 +40,7 @@ void main()
       redrawScreen = 0;
       switch(button_state){
       case 1:
-	clearScreen(COLOR_BLUE);
+	scaleStateMachine();
 	break;
       case 2:
 	christmasStateMachine();

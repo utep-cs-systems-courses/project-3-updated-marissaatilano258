@@ -14,8 +14,7 @@ switch_update_interrupt_sense()
   P2IES &= (switches_current | ~switch_mask); /* if switch down, sense up */
 }
 
-void 
-p2sw_init(unsigned char mask)
+void p2sw_init(unsigned char mask)
 {
   switch_mask = mask;
   P2REN |= mask;    /* enables resistors for switches */
@@ -45,3 +44,4 @@ __interrupt_vec(PORT2_VECTOR) Port_2(){
     switch_update_interrupt_sense();
   }
 }
+

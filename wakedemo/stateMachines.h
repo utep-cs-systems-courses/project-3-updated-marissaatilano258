@@ -5,6 +5,8 @@ extern char button_state;
 
 void changeButtonState(char button_pushed);
 
+void scaleStateMachine();
+
 void snakeStateMachine();
 
 void christmasStateMachine();
