@@ -9,13 +9,17 @@
 #define LED_GREEN BIT6             // P1.0
 
 short redrawScreen = 1;
-
+char curr_state_machine = 0;
 void wdt_c_handler()
 {
   static int secCount = 0;
   
   secCount++;
-  if (secCount == 75) {		/* once/sec */
+  if(secCount == 75 && curr_state_machine != 2){
+    secCount = 0;
+    redrawScreen = 1;
+  }
+  if(secCount == 150 && curr_state_machine == 2){
     secCount = 0;
     redrawScreen = 1;
   }
@@ -34,10 +38,15 @@ void main()
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
   
-  clearScreen(COLOR_WHITE);
+  clearScreen(COLOR_PURPLE);
+  drawString11x16(36,40,"Press", COLOR_YELLOW,COLOR_PURPLE);
+  drawString11x16(30,60,"Button", COLOR_YELLOW, COLOR_PURPLE);
+  drawString11x16(52,80,"To", COLOR_YELLOW, COLOR_PURPLE);
+  drawString11x16(36,100,"Start", COLOR_YELLOW, COLOR_PURPLE);
   while(1){
     if(redrawScreen){
       redrawScreen = 0;
+      curr_state_machine = button_state;
       switch(button_state){
       case 1:
 	scaleStateMachine();
@@ -50,9 +59,6 @@ void main()
 	break;
       case 4:
 	spiderStateMachine();
-	break;
-      default:
-	clearScreen(COLOR_WHITE);
 	break;
       }
     }

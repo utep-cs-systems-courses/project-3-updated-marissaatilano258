@@ -7,16 +7,22 @@
 char button_state = 0;
 static char scale_state = -1;
 static char snake_state = -1;
+static char snake_song_state = -1;
 static char christmas_state = -1;
+static char christmas_song_state = -1;
 static char spider_state = -1;
+static char spider_song_state = -1;
 
 void changeButtonState(char button_pushed)
 {
   button_state = button_pushed;
   scale_state = -1;
-  christmas_state = -1;
   snake_state = -1;
+  snake_song_state = -1;
+  christmas_state = -1;
+  christmas_song_state = -1;
   spider_state = -1;
+  spider_song_state = -1;
   buzzer_set_period(0);
 }
 
@@ -75,7 +81,6 @@ void scaleStateMachine()
 
 void snakeSongStateMachine()
 {
-  static char snake_song_state = 0;
   short note = 0;
 
   switch(snake_song_state){
@@ -129,12 +134,14 @@ void snakeSongStateMachine()
   buzzer_set_period(2000000/note);
 }
 
-void snakeStateMachine(u_int col_offset, u_int thickness)
+void snakeStateMachine()
 {
   static u_int row = 0;
   static u_int col = 60;
   static u_int snake_colorBGR = COLOR_GREEN;
   u_int length = 8;
+  u_int col_offset = 40;
+  u_int thickness = 5;
 
   if(row >= 160){
     row = 0;
@@ -177,67 +184,38 @@ void snakeStateMachine(u_int col_offset, u_int thickness)
 
 void christmasSongStateMachine()
 {
-  static char christmas_song_state = 0;
   short note = 0;
 
   switch(christmas_song_state){
   case 0:
   case 1:
-    note = 587;
-    break;
   case 2:
-  case 3:
-    note = 659;   /*E*/
-    break;
-  case 4:
-  case 5:
-    note = 587;
-    break;
-  case 6:
-  case 7:
     note = 494;
     break;
+  case 3:
+    note = 523;
+    break;
+  case 4:
+    note = 494;
+    break;
+  case 5:
+    note = 466;
+    break;
+  case 6:
+    note =494;
+    break;
+  case 7:
   case 8:
+    note = 523;
+    break;
   case 9:
-    note = 784;
+    note = 554;
     break;
   case 10:
+    note = 587;
+    break;
   case 11:
-    note = 659;
-    break;
-  case 12:
-  case 13:
-  case 14:
-  case 15:
-    note = 587;
-    break;
-  case 16:
     note = 0;
-    break;
-  case 17:
-  case 18:
-    note = 587;
-    break;
-  case 19:
-    note = 659;
-    break;
-  case 20:
-    note = 587;
-    break;
-  case 21:
-    note = 659;
-    break;
-  case 22:
-    note = 587;
-    break;
-  case 23:
-    note = 784;
-    break;
-  case 24:
-  case 25:
-  case 26:
-  case 27:
-    note = 698;
     break;
   default:
     christmas_song_state = -1;
@@ -304,6 +282,56 @@ void drawSpider(u_int row, u_int body_colorBGR, u_int head_colorBGR, u_int strin
   }
 }
 
+void spiderSongStateMachine()
+{
+  short note = 0;
+
+  switch(spider_song_state){
+  case 0:
+    note = 392;
+    break;
+  case 1:
+  case 2:
+  case 3:
+    note = 523;
+    break;
+  case 4:
+    note = 587;
+    break;
+  case 5:
+  case 6:
+    note = 659;
+    break;
+  case 7:
+    note = 0;
+    break;
+  case 8:
+    note = 659;
+    break;
+  case 9:
+    note = 587;
+    break;
+  case 10:
+    note = 523;
+    break;
+  case 11:
+    note = 587;
+    break;
+  case 12:
+    note = 659;
+    break;
+  case 13:
+    note = 523;
+    break;
+  default:
+    spider_song_state = -1;
+    note = 0;
+    break;
+  }
+  spider_song_state++;
+  buzzer_set_period(2000000/note);
+    
+}
 
 void spiderStateMachine()
 {
@@ -338,4 +366,6 @@ void spiderStateMachine()
   drawSpider(prev_row, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK);
   drawSpider(row, COLOR_PURPLE, COLOR_MEDIUM_PURPLE, COLOR_WHITE);
   prev_row = row;
+
+  spiderSongStateMachine();
 }
