@@ -3,6 +3,7 @@
 #include "buzzer.h"
 #include "lcdutils.h"
 #include "lcddraw.h"
+#include "assemblyStateMachine.h"
 
 char button_state = 0;
 static char scale_state = -1;
@@ -26,6 +27,11 @@ void changeButtonState(char button_pushed)
   buzzer_set_period(0);
 }
 
+short convertNote(short note)
+{
+  return 2000000/note;
+}
+
 void scaleStateMachine()
 {
   short note = 0;
@@ -34,49 +40,50 @@ void scaleStateMachine()
 
   switch(scale_state){
   case 0:
-    note = 261;
+    //note = 261;
     drawString11x16(col, row, "Do", COLOR_BLACK, COLOR_RED);
     break;
   case 1:
-    note = 294;
+    //note = 294;
     drawString11x16(col, row, "Re", COLOR_BLACK, COLOR_ORANGE);
     break;
   case 2:
-    note = 330;
+    //note = 330;
     drawString11x16(col, row, "Mi", COLOR_BLACK, COLOR_YELLOW);
     break;
   case 3:
-    note = 349;
+    //note = 349;
     drawString11x16(col, row, "Fa", COLOR_BLACK, COLOR_GREEN);
     break;
   case 4:
-    note = 392;
+    //note = 392;
     drawString11x16(col, row, "So", COLOR_BLACK, COLOR_BLUE);
     break;
   case 5:
-    note = 440;
+    //note = 440;
     drawString11x16(col, row, "La", COLOR_BLACK, COLOR_AQUAMARINE);
     break;
   case 6:
-    note = 494;
+    //note = 494;
     drawString11x16(col, row, "Ti", COLOR_BLACK, COLOR_PURPLE);
     break;
   case 7:
-    note = 523;
+    //note = 523;
     drawString11x16(col, row, "Do", COLOR_BLACK, COLOR_VIOLET);
     break;
   default:
     clearScreen(COLOR_WHITE);
     scale_state = -1;
-    note = 0;
+    //note = 0;
     col = -15;
     row = 165;
     break;
   }
   col+=15;
   row-=20;
+  note = scaleSongStateMachine(scale_state);
+  buzzer_set_period(note);
   scale_state++;
-  buzzer_set_period(2000000/note);
 }
 
 void snakeSongStateMachine()
@@ -131,7 +138,7 @@ void snakeSongStateMachine()
     break;
   }
   snake_song_state++;
-  buzzer_set_period(2000000/note);
+  buzzer_set_period(convertNote(note));
 }
 
 void snakeStateMachine()
@@ -224,7 +231,7 @@ void christmasSongStateMachine()
   }
   
   christmas_song_state++;
-  buzzer_set_period(2000000/note);
+  buzzer_set_period(convertNote(note));
     
 }
 
@@ -329,7 +336,7 @@ void spiderSongStateMachine()
     break;
   }
   spider_song_state++;
-  buzzer_set_period(2000000/note);
+  buzzer_set_period(convertNote(note));
     
 }
 
