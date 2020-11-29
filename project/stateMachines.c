@@ -3,7 +3,7 @@
 #include "buzzer.h"
 #include "lcdutils.h"
 #include "lcddraw.h"
-#include "assemblyStateMachine.h"
+#include "scaleSongSM.h"
 #include "led.h"
 
 char button_state = 0;

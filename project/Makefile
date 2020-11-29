@@ -11,7 +11,7 @@ AR		= msp430-elf-ar
 all:wakedemo.elf
 
 #additional rules for files
-wakedemo.elf: ${COMMON_OBJECTS} led.o buzzer.o stateMachines.o p2switches.o toymain.o wdt_handler.o assemblyStateMachine.o
+wakedemo.elf: ${COMMON_OBJECTS} led.o buzzer.o stateMachines.o p2switches.o toymain.o wdt_handler.o scaleSongSM.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd -lp2sw 
 
 load: wakedemo.elf
