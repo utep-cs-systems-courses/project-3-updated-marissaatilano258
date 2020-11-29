@@ -94,35 +94,6 @@ void drawString5x7(u_char col, u_char row, char *string,
   }
 }
 
-void drawChar8x12(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR)
-{
-  u_char col = 0;
-  u_char row = 0;
-  u_char bit = 0x01;
-  u_char oc = c - 0x20;
-
-  lcd_setArea(rcol, rrow, rcol + 7, rrow + 12);
-  while(row < 13){
-    while(col < 8){
-      u_int colorBGR = (font_8x12[oc][col] & bit) ? fgColorBGR : bgColorBGR;
-      lcd_writeColor(colorBGR);
-      col++;
-    }
-    col = 0;
-    bit <<=1;
-    row++;
-  }
-}
-
-void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
-{
-  u_char cols = col;
-  while(*string) {
-    drawChar8x12(cols, row, *string++, fgColorBGR, bgColorBGR);
-    cols += 9;
-  }
-}
-
 void drawChar11x16(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char col = 0;
@@ -217,5 +188,29 @@ void drawDownwardLine(u_int col, u_int length, u_int colorBGR)
 {
   for(u_int row = 0; row < length; row++){
     drawPixel(col, row, colorBGR);
+  }
+}
+
+void drawSpider(u_int row, u_int body_colorBGR, u_int head_colorBGR, u_int web_colorBGR)
+{
+  u_int col = 60;
+  u_int square_length = 20;
+  u_int line_length = 15;
+
+  drawDownwardLine(col, row - square_length, web_colorBGR);                     /*Draw web*/
+  drawRectFromCenter(square_length, square_length, col, row, body_colorBGR);    /*Draw body*/
+  drawRectFromCenter(square_length/2, square_length/2, col, row, head_colorBGR);/*Draw head*/
+
+  for(int offset = 0; offset < 48; offset += 12){                    /*Draw eight legs*/
+    for(int thickness = 0; thickness < 3; thickness++){
+      u_int leg_row = row - square_length - line_length + offset + thickness;
+      u_int left_leg_col = col - square_length - line_length;
+      u_int right_leg_col = col + square_length + line_length;
+
+      drawLeftDiagnol(leg_row, right_leg_col, line_length, body_colorBGR);
+      drawLeftDiagnol(leg_row, left_leg_col, line_length, body_colorBGR);
+      drawRightDiagnol(leg_row, right_leg_col, line_length, body_colorBGR);
+      drawRightDiagnol(leg_row, left_leg_col, line_length, body_colorBGR);
+    }
   }
 }

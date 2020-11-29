@@ -50,10 +50,6 @@ void drawString5x7(u_char col, u_char row, char *string,
 void drawChar5x7(u_char col, u_char row, char c, 
 		 u_int fgColorBGR, u_int bgColorBGR);
 
-void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR);
-
-void drawChar8x12(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR);
-
 void drawString11x16(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR);
 
 void drawChar11x16(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR);
@@ -80,4 +76,6 @@ void drawRightDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
 void drawLeftDiagnol(u_int row, u_int col, u_int length, u_int colorBGR);
 
 void drawDownwardLine(u_int col, u_int length, u_int colorBGR);
+
+void drawSpider(u_int row, u_int body_colorBGR, u_int head_colorBGR, u_int web_colorBGR);
 #endif // included
